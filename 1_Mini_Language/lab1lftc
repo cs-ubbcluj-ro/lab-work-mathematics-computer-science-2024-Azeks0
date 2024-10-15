@@ -1,0 +1,60 @@
+identifier = letter { letter | digit | "_" } ;
+
+force_const = ["+" | "-"], digit, {digit} ;
+
+alignment_const = "lightside" | "darkside" ; //boolean values
+
+droid_const = "'", letter, "'" ; 
+
+
+
+program = "force", identifier, ";", {declaration, ";"}, "begin", {statement, ";"}, "end", "." ;
+
+
+
+declaration = ("jedi" | "sith"), identifier, ":", type ;
+
+type = "force" | "droid" | "alignment" ;
+
+statement = assignment | iostatement | ifstatement | whilestatement ;
+
+assignment = identifier, ":=", expression ;
+
+iostatement = "sense", "(", identifier, ")" 
+            | "move", "(", expression, ")" ;
+
+ifstatement = "if", condition, "then", statement, ["else", statement] ;
+condition = expression, rel_op, expression ;
+rel_op = "<" | ">" | "<=" | ">=" | "=" | "<>" ;
+
+whilestatement = "while", condition, "do", statement ;
+
+expression = term, { ("+" | "-"), term } ;
+term = factor, { ("*" | "/"), factor } ;
+factor = identifier | force_const | droid_const | alignment_const | "(", expression, ")" ;
+
+rel_op = "<" | ">" | "<=" | ">=" | "=" | "<>" ;
+
+
+force DroidCommander;
+jedi Anakin : alignment;
+jedi Droid1 : droid;
+sith Droid2 : droid;
+jedi PowerLevel : force;
+
+begin
+    sense(Anakin);
+        Anakin := lightside;
+    
+    if Anakin = darkside then
+        move('Droid2 activated');
+    else
+        move('Droid1 activated');
+    
+    PowerLevel := 100;
+    while PowerLevel > 0 do
+    begin
+        move(PowerLevel);
+        PowerLevel := PowerLevel - 10;
+    end;
+end.
